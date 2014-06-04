@@ -1,0 +1,24 @@
+{
+	"name": "librette/confirmation-dialog",
+	"type": "library",
+	"keywords": ["nette", "librette", "confirmation"],
+	"license": ["BSD-3-Clause", "GPL-2.0", "GPL-3.0"],
+	"authors": [
+		{
+			"name": "David Matějka",
+			"homepage": "http://www.matej21.cz"
+		}
+	],
+	"require": {
+		"php": ">=5.4",
+		"nette/nette": "~2.1@dev"
+	},
+	"require-dev": {
+		"nette/tester": "@dev"
+	},
+	"autoload": {
+		"psr-4": {
+			"Librette\\ConfirmationDialog\\": "src/"
+		}
+	}
+}
