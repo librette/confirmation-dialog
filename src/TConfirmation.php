@@ -36,12 +36,11 @@ trait TConfirmation
 		/** @var Form $form */
 		$form = $this['confirmationDialog']['form'];
 		if ($form['ok']->isSubmittedBy()) {
-			$token = $form['token']->value;
-			if ($token === $this->getConfirmationToken($this->getPresenter()->signal, $this->getParameters())) {
-				return TRUE;
-			} else {
+			if ($form['token']->value !== $this->getConfirmationToken($this->getPresenter()->signal, $this->getParameters())) {
 				throw new Nette\Application\UI\BadSignalException("Token is not valid");
 			}
+
+			return TRUE;
 		} elseif ($form['cancel']->isSubmittedBy()) {
 			$form['cancel']->onClick($form['cancel']);
 
@@ -73,9 +72,7 @@ trait TConfirmation
 
 	protected function createComponentConfirmationDialog()
 	{
-		$dialog = new ConfirmationDialog();
-
-		return $dialog;
+		return new ConfirmationDialog();
 	}
 
 }

@@ -28,9 +28,7 @@ class ConfirmationForm extends Form
 			if (!isset($this->getElementPrototype()->id)) {
 				$this->getElementPrototype()->id = 'frm-' . $name;
 			}
-			$tracker = new Controls\HiddenField($name);
-			$tracker->setOmitted();
-			$this[self::TRACKER_ID] = $tracker;
+			$this[self::TRACKER_ID] = (new Controls\HiddenField($name))->setOmitted();
 			if (iterator_count($this->getControls()) && $this->isSubmitted()) {
 				foreach ($this->getControls() as $control) {
 					if (!$control->isDisabled()) {
