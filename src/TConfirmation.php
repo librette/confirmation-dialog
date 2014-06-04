@@ -36,7 +36,7 @@ trait TConfirmation
 		/** @var Form $form */
 		$form = $this['confirmationDialog']['form'];
 		if ($form['ok']->isSubmittedBy()) {
-			if ($form['token']->value !== $this->getConfirmationToken($this->getPresenter()->signal, $this->getParameters())) {
+			if ($form['token']->value !== $this->getConfirmationToken()) {
 				throw new Nette\Application\UI\BadSignalException("Token is not valid");
 			}
 
@@ -47,7 +47,7 @@ trait TConfirmation
 			return FALSE;
 		}
 		$this['confirmationDialog']->enabled = TRUE;
-		$form['token']->value = $this->getConfirmationToken($this->getPresenter()->signal, $this->getParameters());
+		$form['token']->value = $this->getConfirmationToken();
 
 		return FALSE;
 	}
@@ -59,14 +59,16 @@ trait TConfirmation
 	}
 
 
-	protected function getConfirmationToken($signal, $parameters)
+	protected function getConfirmationToken()
 	{
 		$sessionSection = $this->getPresenter()->getSession('Librette.ConfirmationDialog');
 		if (!isset($sessionSection->token)) {
 			$sessionSection->token = Random::generate(10);
 		}
 
-		return substr(md5(serialize([get_class($this), $signal, $parameters]) . $sessionSection->token), 0, 10);
+		$signalIdentifier = [get_class($this), $this->getPresenter()->signal, $this->getParameters()];
+
+		return substr(md5(serialize($signalIdentifier) . $sessionSection->token), 0, 10);
 	}
 
 
