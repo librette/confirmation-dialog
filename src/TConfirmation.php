@@ -24,13 +24,13 @@ trait TConfirmation
 	}
 
 
-	protected function confirm($message = NULL)
+	protected function confirm($question = NULL)
 	{
 		if (!$this->processingSignal) {
 			throw new \LogicException("You can use confirmation dialog only in handle* methods");
 		}
-		if ($message !== NULL) {
-			$this['confirmationDialog']->message = $message;
+		if ($question !== NULL) {
+			$this['confirmationDialog']->question = $question;
 		}
 
 		/** @var Form $form */

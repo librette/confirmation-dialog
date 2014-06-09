@@ -7,8 +7,8 @@ use Nette\Application\UI\Control;
 /**
  * @author David Matejka
  *
- * @method string getMessage()
- * @method setMessage(string $message)
+ * @method string getQuestion()
+ * @method setQuestion(string $message)
  * @method setTemplateFile(string $templateFile)
  * @method string getTemplateFile()
  * @method setEnabled(bool $enabled)
@@ -20,7 +20,7 @@ class ConfirmationDialog extends Control
 	protected $templateFile;
 
 	/** @var string */
-	protected $message = 'Are you sure?';
+	protected $question = 'Are you sure?';
 
 	/** @var bool */
 	protected $enabled = FALSE;
@@ -49,7 +49,7 @@ class ConfirmationDialog extends Control
 			return;
 		}
 		$this->template->setFile($this->templateFile);
-		$this->template->message = $this->message;
+		$this->template->question = $this->question;
 		$this->template->render();
 	}
 }
