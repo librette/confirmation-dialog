@@ -45,10 +45,8 @@ class ConfirmationDialog extends Control
 
 	public function render()
 	{
-		if (!$this->enabled) {
-			return;
-		}
 		$this->template->setFile($this->templateFile);
+		$this->template->enabled = $this->enabled;
 		$this->template->question = $this->question;
 		$this->template->render();
 	}
