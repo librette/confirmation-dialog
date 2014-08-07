@@ -2,6 +2,7 @@
 namespace Librette\ConfirmationDialog;
 
 use Nette;
+use Nette\Application\UI\Presenter;
 use Nette\Forms\Form;
 use Nette\Utils\Random;
 
@@ -66,7 +67,8 @@ trait TConfirmation
 			$sessionSection->token = Random::generate(10);
 		}
 
-		$signalIdentifier = [get_class($this), $this->getPresenter()->signal, $this->getParameters()];
+		$parameters = $this instanceof Presenter ? $this->request->getParameters() : $this->getParameters();
+		$signalIdentifier = [get_class($this), $this->getPresenter()->signal, $parameters];
 
 		return substr(md5(serialize($signalIdentifier) . $sessionSection->token), 0, 10);
 	}
