@@ -12,24 +12,8 @@ use Nette\Utils\Random;
 trait TConfirmation
 {
 
-	private $processingSignal = FALSE;
-
-
-	public function signalReceived($signal)
-	{
-		$this->processingSignal = TRUE;
-		$result = parent::signalReceived($signal);
-		$this->processingSignal = FALSE;
-
-		return $result;
-	}
-
-
 	protected function confirm($question = NULL)
 	{
-		if (!$this->processingSignal) {
-			throw new \LogicException("You can use confirmation dialog only in handle* methods");
-		}
 		if ($question !== NULL) {
 			$this['confirmationDialog']->question = $question;
 		}
