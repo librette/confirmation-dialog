@@ -4,16 +4,26 @@ namespace Librette\ConfirmationDialog;
 use Nette;
 use Nette\Application\UI\Presenter;
 use Nette\Forms\Form;
+use Nette\Localization\ITranslator;
 use Nette\Utils\Random;
 
 /**
  * @author David Matejka
+ * @mixin \Nette\Application\UI\Control
  */
 trait TConfirmation
 {
 
-	protected function confirm($question = NULL)
+	/** @var ITranslator */
+	public $confirmationTranslator;
+
+
+	protected function confirm($question = NULL, $count = NULL, $parameters = [])
 	{
+		if ($question !== NULL && $translator = $this->getConfirmationTranslator()) {
+			$question = $translator->translate($question, $count, $parameters);
+		}
+
 		if ($question !== NULL) {
 			$this['confirmationDialog']->question = $question;
 		}
@@ -76,6 +86,28 @@ trait TConfirmation
 	protected function createComponentConfirmationDialog()
 	{
 		return new ConfirmationDialog();
+	}
+
+
+	public function injectConfirmationTranslator(ITranslator $translator = NULL)
+	{
+		$this->confirmationTranslator = $translator;
+	}
+
+
+	/**
+	 * @return ITranslator|null
+	 */
+	private function getConfirmationTranslator()
+	{
+		if ($this->confirmationTranslator === NULL) {
+			if (!($presenter = $this->getPresenter(FALSE))) {
+				return NULL;
+			}
+			$this->confirmationTranslator = $presenter->getContext()->getByType('Nette\Localization\ITranslator', FALSE) ?: FALSE;
+		}
+
+		return $this->confirmationTranslator ?: NULL;
 	}
 
 }
