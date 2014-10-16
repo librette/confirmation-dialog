@@ -38,13 +38,28 @@ trait TConfirmation
 	}
 
 
+	/**
+	 * @return bool
+	 */
 	protected function isConfirmationCancelled()
 	{
 		return $this['confirmationDialog']['form']['cancel']->isSubmittedBy();
 	}
 
 
-	protected function getConfirmationToken()
+	/**
+	 * @return bool TRUE when confirmation was cancelled or successfully confirmed, otherwise FALSE
+	 */
+	protected function isConfirmationTerminated()
+	{
+		return $this->isConfirmationCancelled() || $this->confirm();
+	}
+
+
+	/**
+	 * @return string
+	 */
+	private function getConfirmationToken()
 	{
 		$sessionSection = $this->getPresenter()->getSession('Librette.ConfirmationDialog');
 		if (!isset($sessionSection->token)) {
