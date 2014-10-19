@@ -15,7 +15,10 @@ trait TConfirmation
 {
 
 	/** @var ITranslator */
-	public $confirmationTranslator;
+	protected $confirmationTranslator;
+
+	/** @var ConfirmationDialogFactory */
+	protected $confirmationDialogFactory;
 
 
 	protected function confirm($question = NULL, $count = NULL, $parameters = [])
@@ -85,13 +88,18 @@ trait TConfirmation
 
 	protected function createComponentConfirmationDialog()
 	{
-		return new ConfirmationDialog();
+		if ($this->confirmationDialogFactory !== NULL) {
+			return $this->confirmationDialogFactory->create();
+		} else {
+			return new ConfirmationDialog();
+		}
 	}
 
 
-	public function injectConfirmationTranslator(ITranslator $translator = NULL)
+	public function injectConfirmationDialogDependencies(ITranslator $translator = NULL, ConfirmationDialogFactory $confirmationDialogFactory = NULL)
 	{
 		$this->confirmationTranslator = $translator;
+		$this->confirmationDialogFactory = $confirmationDialogFactory;
 	}
 
 
