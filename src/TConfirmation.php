@@ -37,6 +37,12 @@ trait TConfirmation
 			if ($form['token']->value !== $this->getConfirmationToken()) {
 				throw new Nette\Application\UI\BadSignalException("Token is not valid");
 			}
+			$form->validate();
+			if (!$form->isValid()) {
+				$this['confirmationDialog']->enabled = TRUE;
+
+				return FALSE;
+			}
 
 			return TRUE;
 		} elseif ($form['cancel']->isSubmittedBy()) {
