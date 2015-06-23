@@ -35,9 +35,12 @@ class ConfirmationDialog extends Control
 	protected function createComponentForm()
 	{
 		$form = new ConfirmationForm();
+		$group = $form->addGroup();
+		$form->addGroup();
 		$form->addHidden('token');
 		$form->addSubmit('ok', 'OK');
-		$form->addSubmit('cancel', 'Cancel');
+		$form->addSubmit('cancel', 'Cancel')->setValidationScope(FALSE);
+		$form->setCurrentGroup($group);
 
 		return $form;
 	}
