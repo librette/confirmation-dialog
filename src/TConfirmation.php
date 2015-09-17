@@ -2,6 +2,7 @@
 namespace Librette\ConfirmationDialog;
 
 use Nette;
+use Nette\Application\UI\BadSignalException;
 use Nette\Application\UI\Presenter;
 use Nette\Forms\Form;
 use Nette\Localization\ITranslator;
@@ -27,19 +28,21 @@ trait TConfirmation
 			$question = $translator->translate($question, $count, $parameters);
 		}
 
+		/** @var ConfirmationDialog $confirmationDialog */
+		$confirmationDialog = $this['confirmationDialog'];
 		if ($question !== NULL) {
-			$this['confirmationDialog']->question = $question;
+			$confirmationDialog->setQuestion($question);
 		}
 
 		/** @var Form $form */
-		$form = $this['confirmationDialog']['form'];
+		$form = $confirmationDialog['form'];
 		if ($form['ok']->isSubmittedBy()) {
 			if ($form['token']->value !== $this->getConfirmationToken()) {
-				throw new Nette\Application\UI\BadSignalException("Token is not valid");
+				throw new BadSignalException('Token is not valid');
 			}
 			$form->validate();
 			if (!$form->isValid()) {
-				$this['confirmationDialog']->enabled = TRUE;
+				$confirmationDialog->setEnabled(TRUE);
 
 				return FALSE;
 			}
@@ -50,7 +53,7 @@ trait TConfirmation
 
 			return FALSE;
 		}
-		$this['confirmationDialog']->enabled = TRUE;
+		$confirmationDialog->setEnabled(TRUE);
 		$form['token']->value = $this->getConfirmationToken();
 
 		return FALSE;
@@ -118,7 +121,7 @@ trait TConfirmation
 			if (!($presenter = $this->getPresenter(FALSE))) {
 				return NULL;
 			}
-			$this->confirmationTranslator = $presenter->getContext()->getByType('Nette\Localization\ITranslator', FALSE) ?: FALSE;
+			$this->confirmationTranslator = $presenter->getContext()->getByType(ITranslator::class, FALSE) ?: FALSE;
 		}
 
 		return $this->confirmationTranslator ?: NULL;

@@ -1,9 +1,11 @@
 <?php
 namespace Librette\ConfirmationDialog;
 
-use Nette;
+use Nette\Application\UI\Presenter;
+use Nette\ComponentModel\IContainer;
 use Nette\Forms\Controls;
 use Nette\Forms\Form;
+use Nette\Http\IRequest;
 
 /**
  * @author David Matejka
@@ -11,20 +13,32 @@ use Nette\Forms\Form;
 class ConfirmationForm extends Form
 {
 
-	protected function validateParent(Nette\ComponentModel\IContainer $parent)
+	/**
+	 * @param IRequest|null
+	 */
+	public function __construct(IRequest $httpRequest = NULL)
+	{
+		parent::__construct();
+		$this->httpRequest = $httpRequest;
+	}
+
+
+	protected function validateParent(IContainer $parent)
 	{
 		parent::validateParent($parent);
-		$this->monitor('Nette\Application\UI\Presenter');
+		$this->monitor(Presenter::class);
 	}
 
 
 	protected function attached($obj)
 	{
 		parent::attached($obj);
-		if ($obj instanceof Nette\Application\UI\Presenter) {
-			$this->httpRequest = $obj->getContext()->getByType('Nette\Http\IRequest');
+		if ($obj instanceof Presenter) {
+			if ($this->httpRequest === NULL) {
+				$this->httpRequest = $obj->getContext()->getByType(IRequest::class);
+			}
 			$this->getElementPrototype()->action = substr($this->httpRequest->getUrl(), strlen($this->httpRequest->getUrl()->hostUrl));
-			$name = $this->lookupPath('Nette\Application\UI\Presenter');
+			$name = $this->lookupPath(Presenter::class);
 			if (!isset($this->getElementPrototype()->id)) {
 				$this->getElementPrototype()->id = 'frm-' . $name;
 			}
@@ -42,7 +56,7 @@ class ConfirmationForm extends Form
 
 	public function isAnchored()
 	{
-		return (bool) $this->lookup('Nette\Application\UI\Presenter', FALSE);
+		return (bool) $this->lookup(Presenter::class, FALSE);
 	}
 
 }

@@ -1,17 +1,10 @@
 <?php
 namespace Librette\ConfirmationDialog;
 
-use Nette;
 use Nette\Application\UI\Control;
 
 /**
  * @author David Matejka
- *
- * @method string getQuestion()
- * @method setQuestion(string $message)
- * @method setTemplateFile(string $templateFile)
- * @method string getTemplateFile()
- * @method setEnabled(bool $enabled)
  */
 class ConfirmationDialog extends Control
 {
@@ -46,6 +39,51 @@ class ConfirmationDialog extends Control
 	}
 
 
+	/**
+	 * @return string
+	 */
+	public function getQuestion()
+	{
+		return $this->question;
+	}
+
+
+	/**
+	 * @param string
+	 * @return self
+	 */
+	public function setQuestion($question)
+	{
+		$this->question = $question;
+
+		return $this;
+	}
+
+
+	/**
+	 * @param string
+	 * @return self
+	 */
+	public function setTemplateFile($templateFile)
+	{
+		$this->templateFile = $templateFile;
+
+		return $this;
+	}
+
+
+	/**
+	 * @param boolean
+	 * @return self
+	 */
+	public function setEnabled($enabled)
+	{
+		$this->enabled = $enabled;
+
+		return $this;
+	}
+
+
 	public function render()
 	{
 		$this->template->setFile($this->templateFile);
@@ -53,4 +91,5 @@ class ConfirmationDialog extends Control
 		$this->template->question = $this->question;
 		$this->template->render();
 	}
+
 }

@@ -11,4 +11,5 @@ interface ConfirmationDialogFactory
 	 * @return ConfirmationDialog
 	 */
 	public function create();
+
 }
