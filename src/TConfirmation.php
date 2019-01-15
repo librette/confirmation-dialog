@@ -89,7 +89,7 @@ trait TConfirmation
 		}
 
 		$parameters = $this instanceof Presenter ? $this->request->getParameters() : $this->getParameters();
-		$signalIdentifier = [get_class($this), $this->getPresenter()->signal, $parameters];
+		$signalIdentifier = [get_class($this), $this->getPresenter()->getSignal(), $parameters];
 
 		return substr(md5(serialize($signalIdentifier) . $sessionSection->token), 0, 10);
 	}
