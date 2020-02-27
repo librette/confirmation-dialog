@@ -1,4 +1,5 @@
 <?php
+
 namespace Librette\ConfirmationDialog;
 
 use Nette\Application\UI\Presenter;
@@ -16,25 +17,18 @@ class ConfirmationForm extends Form
 	/**
 	 * @param IRequest|null
 	 */
-	public function __construct(IRequest $httpRequest = NULL)
+	public function __construct(IRequest $httpRequest = null)
 	{
 		parent::__construct();
 		$this->httpRequest = $httpRequest;
 	}
 
 
-	protected function validateParent(IContainer $parent)
+	protected function validateParent(IContainer $parent): void
 	{
 		parent::validateParent($parent);
-		$this->monitor(Presenter::class);
-	}
-
-
-	protected function attached($obj)
-	{
-		parent::attached($obj);
-		if ($obj instanceof Presenter) {
-			if ($this->httpRequest === NULL) {
+		$this->monitor(Presenter::class, function (Presenter $obj) {
+			if ($this->httpRequest === null) {
 				$this->httpRequest = $obj->getContext()->getByType(IRequest::class);
 			}
 			$this->getElementPrototype()->action = substr($this->httpRequest->getUrl(), strlen($this->httpRequest->getUrl()->hostUrl));
@@ -50,13 +44,13 @@ class ConfirmationForm extends Form
 					}
 				}
 			}
-		}
+		});
 	}
 
 
-	public function isAnchored()
+	public function isAnchored(): bool
 	{
-		return (bool) $this->lookup(Presenter::class, FALSE);
+		return (bool) $this->lookup(Presenter::class, false);
 	}
 
 }

@@ -10,14 +10,15 @@
 		}
 	],
 	"require": {
-		"php": ">=5.5",
-		"nette/application": "~2.3",
-		"nette/forms": "~2.3",
-		"nette/utils": "~2.3",
-		"nette/di": "~2.3"
+		"php": ">=7.1",
+		"nette/application": "~3.0",
+		"nette/forms": "~3.0",
+		"nette/utils": "~3.0",
+		"nette/di": "~3.0"
 	},
 	"require-dev": {
-		"nette/tester": "@dev"
+		"nette/tester": "@dev",
+		"phpstan/phpstan": "^0.12.11"
 	},
 	"autoload": {
 		"psr-4": {
